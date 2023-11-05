@@ -20,7 +20,7 @@ def ingest_docs()->None:
     
     print(f"gint to insert {len(documents)} to pinecone")
     
-    embeddings=OpenAIEmbeddings(openai_api_key="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")
+    embeddings=OpenAIEmbeddings(openai_api_key="")
     Pinecone.from_documents(documents,embeddings,index_name="langchain-docs-index")
 
     print("aaaa")
