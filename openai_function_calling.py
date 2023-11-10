@@ -1,80 +1,154 @@
 import openai
 import json
+student_1_description = "David Nguyen is a sophomore majoring in computer science at Stanford University. He is Asian American and has a 3.8 GPA. David is known for his programming skills and is an active member of the university's Robotics Club. He hopes to pursue a career in artificial intelligence after graduating."
 
-# Example dummy function hard coded to return the same weather
-# In production, this could be your backend API or an external API
-def get_current_weather(location, unit="fahrenheit"):
-    """Get the current weather in a given location"""
-    if "tokyo" in location.lower():
-        return json.dumps({"location": location, "temperature": "10", "unit": "celsius"})
-    elif "san francisco" in location.lower():
-        return json.dumps({"location": location, "temperature": "72", "unit": "fahrenheit"})
-    else:
-        return json.dumps({"location": location, "temperature": "22", "unit": "celsius"})
+# A simple prompt to extract information from "student_description" in a JSON format.
+prompt1 = f'''
+            Please extract the following information from the given text and return it as a JSON object:
 
-def run_conversation():
-    # Step 1: send the conversation and available functions to the model
-    messages = [{"role": "user", "content": "What's the weather like in San Francisco, Tokyo, and Paris?"}]
-    tools = [
-        {
-            "type": "function",
-            "function": {
-                "name": "get_current_weather",
-                "description": "Get the current weather in a given location",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "location": {
-                            "type": "string",
-                            "description": "The city and state, e.g. San Francisco, CA",
-                        },
-                        "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
-                    },
-                    "required": ["location"],
+            name
+            major
+            school
+            grades
+            club
+
+            This is the body of text to extract the information from:
+            {student_1_description}
+            '''
+
+
+# Generating response back from gpt-3.5-turbo
+# openai_response = openai.ChatCompletion.create(
+#     model = 'gpt-3.5-turbo',
+#     messages = [{'role': 'user', 'content': prompt1}]
+# )
+# print(openai_response['choices'][0]['message']['content'])
+
+student_2_description="Ravi Patel is a sophomore majoring in computer science at the University of Michigan. He is South Asian Indian American and has a 3.7 GPA. Ravi is an active member of the university's Chess Club and the South Asian Student Association. He hopes to pursue a career in software engineering after graduating."
+
+prompt2 = f'''
+Please extract the following information from the given text and return it as a JSON object:
+
+name
+major
+school
+grades
+club
+
+This is the body of text to extract the information from:
+{student_2_description}
+'''
+
+# openai_response = openai.ChatCompletion.create(
+#     model = 'gpt-3.5-turbo',
+#     messages = [{'role': 'user', 'content': prompt2 }]
+# )
+
+# # Loading the response as a JSON object
+# json_response = json.loads(openai_response['choices'][0]['message']['content'])
+# print(json_response)
+
+student_custom_functions = [
+    {
+        'name': 'extract_student_info',
+        'description': 'Get the student information from the body of the input text',
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'description': 'Name of the person'
                 },
-            },
-        }
-    ]
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-1106",
-        messages=messages,
-        tools=tools,
-        tool_choice="auto",  # auto is default, but we'll be explicit
-    )
-    response_message = response.choices[0].message
-    tool_calls = response_message.tool_calls
-
-    # Step 2: check if the model wanted to call a function
-    if tool_calls:
-        # Step 3: call the function
-        # Note: the JSON response may not always be valid; be sure to handle errors
-        available_functions = {
-            "get_current_weather": get_current_weather,
-        }  # only one function in this example, but you can have multiple
-        messages.append(response_message)  # extend conversation with assistant's reply
-        # Step 4: send the info for each function call and function response to the model
-        for tool_call in tool_calls:
-            function_name = tool_call.function.name
-            function_to_call = available_functions[function_name]
-            function_args = json.loads(tool_call.function.arguments)
-            function_response = function_to_call(
-                location=function_args.get("location"),
-                unit=function_args.get("unit"),
-            )
-            messages.append(
-                {
-                    "tool_call_id": tool_call.id,
-                    "role": "tool",
-                    "name": function_name,
-                    "content": function_response,
+                'major': {
+                    'type': 'string',
+                    'description': 'Major subject.'
+                },
+                'school': {
+                    'type': 'string',
+                    'description': 'The university name.'
+                },
+                'grades': {
+                    'type': 'integer',
+                    'description': 'GPA of the student.'
+                },
+                'club': {
+                    'type': 'string',
+                    'description': 'School club for extracurricular activities. '
                 }
-            )  # extend conversation with function response
-        second_response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-1106",
-            messages=messages,
-        )  # get a new response from the model where it can see the function response
+                
+            }
+        }
+    }
+]
 
-        print(messages)
-        return second_response
-    
-print(run_conversation())
+custom_functions = [
+    {
+        'name': 'extract_student_info',
+        'description': 'Get the student information from the body of the input text',
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'description': 'Name of the person'
+                },
+                'major': {
+                    'type': 'string',
+                    'description': 'Major subject.'
+                },
+                'school': {
+                    'type': 'string',
+                    'description': 'The university name.'
+                },
+                'grades': {
+                    'type': 'integer',
+                    'description': 'GPA of the student.'
+                },
+                'club': {
+                    'type': 'string',
+                    'description': 'School club for extracurricular activities. '
+                }
+                
+            }
+        }
+    },
+    {
+        'name': 'extract_school_info',
+        'description': 'Get the school information from the body of the input text',
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'description': 'Name of the school.'
+                },
+                'ranking': {
+                    'type': 'integer',
+                    'description': 'QS world ranking of the school.'
+                },
+                'country': {
+                    'type': 'string',
+                    'description': 'Country of the school.'
+                },
+                'no_of_students': {
+                    'type': 'integer',
+                    'description': 'Number of students enrolled in the school.'
+                }
+            }
+        }
+    }
+]
+school_1_description = "Stanford University is a private research university located in Stanford, California, United States. It was founded in 1885 by Leland Stanford and his wife, Jane Stanford, in memory of their only child, Leland Stanford Jr. The university is ranked #5 in the world by QS World University Rankings. It has over 17,000 students, including about 7,600 undergraduates and 9,500 graduates23. "
+
+student_description = [student_1_description,school_1_description]
+for sample in student_description:
+    response = openai.ChatCompletion.create(
+        model = 'gpt-3.5-turbo',
+        messages = [{'role': 'user', 'content': sample}],
+        functions = custom_functions,
+        function_call = 'auto'
+    )
+
+    # Loading the response as a JSON object
+    json_response = json.loads(response['choices'][0]['message']['function_call']['arguments'])
+    print(json_response)
