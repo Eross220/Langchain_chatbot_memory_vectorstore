@@ -152,3 +152,5 @@ for sample in student_description:
     # Loading the response as a JSON object
     json_response = json.loads(response['choices'][0]['message']['function_call']['arguments'])
     print(json_response)
+
+
