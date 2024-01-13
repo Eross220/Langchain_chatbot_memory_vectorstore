@@ -1,2 +1,5 @@
 langchain
 streamlit
+python-dotenv
+pinecone
+ast
