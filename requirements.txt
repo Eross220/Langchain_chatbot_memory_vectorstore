@@ -5,3 +5,5 @@ pinecone-client
 streamlit-chat
 openai
 tiktoken
+langchain-openai
+langchain-pinecone

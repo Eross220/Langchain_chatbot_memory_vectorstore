@@ -17,7 +17,6 @@ INDEX_NAME=os.getenv("INDEX_NAME")
 print(INDEX_NAME)
 
 
-# pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMEN_REGION)
 pc = Pinecone(api_key=PINECONE_API_KEY)
 
 
@@ -28,7 +27,7 @@ def run_llm (query: str, chat_history: List[Dict[str, Any]] = []):
     chat= ChatOpenAI(verbose=True,temperature=0,openai_api_key=OPENAI_API_KEY)
     qa= RetrievalQA.from_chain_type(llm=chat, chain_type="stuff", retriever=docsearch.as_retriever(), return_source_documents=True)
 
-    return qa.invoke({"query": query, "chat_history": chat_history})
+    return qa.invoke({"query":"You are helpful assistant. You should answer as much as possible based on this concept."+query, "chat_history": chat_history})
 
 
 if __name__ == "__main__":
