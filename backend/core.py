@@ -1,12 +1,13 @@
 import os
 from dotenv import load_dotenv
 load_dotenv()
-from langchain.embeddings import OpenAIEmbeddings
+from typing import Any, Dict, List
+
 from langchain.chains import RetrievalQA
 from langchain.vectorstores.pinecone import Pinecone
-from langchain.chat_models import ChatOpenAI
-import pinecone
-
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_pinecone import Pinecone as PineconeLangchain
+from pinecone import Pinecone
 
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 PINECONE_API_KEY=os.getenv("PINECONE_API_KEY")
@@ -15,16 +16,20 @@ INDEX_NAME=os.getenv("INDEX_NAME")
 
 print(INDEX_NAME)
 
-pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMEN_REGION)
 
-def run_llm (query:str)->any:
+# pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMEN_REGION)
+pc = Pinecone(api_key=PINECONE_API_KEY)
+
+
+def run_llm (query: str, chat_history: List[Dict[str, Any]] = []):
     embeddings= OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    docsearch= Pinecone.from_existing_index(index_name=INDEX_NAME ,embedding=embeddings)
+    docsearch= PineconeLangchain.from_existing_index(index_name=INDEX_NAME ,embedding=embeddings)
 
     chat= ChatOpenAI(verbose=True,temperature=0,openai_api_key=OPENAI_API_KEY)
     qa= RetrievalQA.from_chain_type(llm=chat, chain_type="stuff", retriever=docsearch.as_retriever(), return_source_documents=True)
 
-    return qa({"query":query})
+    return qa.invoke({"query": query, "chat_history": chat_history})
+
 
 if __name__ == "__main__":
-    print(run_llm(query="What is Langchain?"))
+    print(run_llm(query="what is Langchain?"))
