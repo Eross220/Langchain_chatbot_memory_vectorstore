@@ -14,21 +14,22 @@ PINECONE_API_KEY=os.getenv("PINECONE_API_KEY")
 PINECONE_ENVIRONMEN_REGION=os.getenv("PINECONE_ENVIRONMEN_REGION")
 INDEX_NAME=os.getenv("INDEX_NAME")
 
-print(INDEX_NAME)
 
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
 
 
 def run_llm (query: str, chat_history: List[Dict[str, Any]] = []):
+   
     embeddings= OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     docsearch= PineconeLangchain.from_existing_index(index_name=INDEX_NAME ,embedding=embeddings)
 
     chat= ChatOpenAI(verbose=True,temperature=0,openai_api_key=OPENAI_API_KEY)
     qa= RetrievalQA.from_chain_type(llm=chat, chain_type="stuff", retriever=docsearch.as_retriever(), return_source_documents=True)
-
+    
+    print("query:", query)
     return qa.invoke({"query":query, "chat_history": chat_history})
 
 
-if __name__ == "__main__":
-    print(run_llm(query="what is Langchain?"))
+# if __name__ == "__main__":
+#     print(run_llm(query="what is Langchain?"))
