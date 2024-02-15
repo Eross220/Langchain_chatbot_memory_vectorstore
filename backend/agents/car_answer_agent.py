@@ -26,9 +26,6 @@ def car_answer_agent(query:str,  chat_history: List[Dict[str, Any]] = []):
         For example, to answer any question about cars, you should require the type of car: SUV, Truck, Sedan, Other.
         You should require the fuel type: Petrol, hybrid, electric.
         You should require the color: blue, green, grey, red, white, silver, black. If you don't get this information then prompt a follow up question to complete the context.
-        Do not guess or estimate  answers. you must rely only on the answer that you get from the tools.
-        Do not answer to question with anything else but the tools provided to you.
-
         Begin!
 
         Question: {question}

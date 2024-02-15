@@ -37,9 +37,10 @@ def run_llm (query: str, chat_history: List[Dict[str, Any]] = []):
 def cars_tool():
     
     structured_tool = StructuredTool.from_function(
-        name="Car answer",
-        func=car_answer_agent,
-        description="Use this tool if you want to answer the question of the car"
+        name="cars_answer",
+        func=run_llm,
+        description="Search for information about Cars. For any questions about Cars, you must use this tool!",
+        return_direct=True
     )
 
     return structured_tool
@@ -47,16 +48,16 @@ def cars_tool():
 def medical_tool():
     
     structured_tool = StructuredTool.from_function(
-        name="Medical answer",
+        name="medical_answer",
         func=run_llm,
-        description="Use this tool if you want to answer about question related medical"
+        description="Search for information about Medical. For any questions about medical, you must use this tool!"
     )
 
     return structured_tool
 
 def general_tool():
     structured_tool = StructuredTool.from_function(
-        name="General answer",
+        name="genera_answer",
         func=run_llm,
         description="Use this tool if you want to answer questions that don't involve about certail fields such as cars, medicals and so on."
     )
@@ -68,7 +69,7 @@ def cars_parameter_confirm_tool():
     structured_tool = StructuredTool.from_function(
         name="Car parameter confiirm",
         func=run_llm,
-        description="Use this tool when you confirmed all parameter of car"
+        description="Use this tool when you confirmed all parameter of cars"
     )
 
 
