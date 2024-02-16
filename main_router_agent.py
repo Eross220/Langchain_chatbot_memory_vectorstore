@@ -73,18 +73,52 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
 
 
     products_chains=get_products_chain()
-
     products= products_chains.run(answer=answer["output"])
     products= product_parser.parse(products)
-    print(products.to_dict())
+    product_list= products.to_dict()
 
-    return answer
+    # print("question:\n", query)
+    
+    # print("answer: ",answer["output"])
+
+    # print("product list:\n", product_list)
+    # print("product:\n",product_list["products"][0].to_json())
+
+    return (
+        {
+            "result":answer["output"],
+            "product_list":product_list
+        }
+    ) 
 
 if __name__=='__main__':
-    print(main_agent(query="Do you have cars?"))
-    print(main_agent(query=" I have toothache. what should I do?"))
-    print(main_agent(query="Do you have bandages?"))
-    # answer= main_agent(query="Do you have cars?")
+    
+    # main_agent(query=" I have toothache. what should I do?")
+    answer = main_agent(query="Do you have bandages")
+
+    print(answer)
+
+    # product_list =answer["product_list"]["products"]
+
+    
+    # def create_product_string(porduct_list:List[any]):
+    #     product_json_array= []
+
+    #     product_list_str = " " 
+    #     for index, product in enumerate(product_list):
+    #         product_json_array.append(product.to_json())
+    #         product_json= product.to_json()
+    #         product_name= product_json['product_name']
+    #         product_link= product_json['product_link']
+    #         if len(product_json["product_link"])!=0:
+    #              product_list_str += f"{index}. {product_name} \n {product_link}"
+           
+
+    #     return product_list_str
+
+
+    # print("json array:",create_product_string(product_list))
+    #answer= main_agent(query="what is your name?")
     # products_chains=get_products_chain()
 
     # products= products_chains.run(answer=answer["output"])

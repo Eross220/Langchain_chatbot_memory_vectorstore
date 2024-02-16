@@ -30,6 +30,21 @@ def run_llm (query: str, chat_history: List[Dict[str, Any]] = []):
     print("query:", query)
     return qa.invoke({"query":query, "chat_history": chat_history})
 
+def create_product_string(product_list:List[any]):
+    product_json_array= []
+
+    product_list_str = " " 
+    for index, product in enumerate(product_list):
+        product_json_array.append(product.to_json())
+        product_json= product.to_json()
+        product_name= product_json['product_name']
+        product_link= product_json['product_link']
+        if len(product_json["product_link"])!=0:
+                product_list_str += f"{index}. {product_name} \n {product_link}"
+        
+
+    return product_list_str
+
 
 # if __name__ == "__main__":
 #     print(run_llm(query="what is Langchain?"))

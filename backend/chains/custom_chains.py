@@ -10,9 +10,11 @@ llm_creative = ChatOpenAI(temperature=1, model_name="gpt-3.5-turbo")
 
 def get_products_chain()-> LLMChain:
     product_template="""
-       given the answer {answer} from I want you to extract:
-       products list you mentioned..
-       You must  only extract products which you explained in answer.
+       given the text ** {answer}  **, I want you to create:\n
+       products list you mentioned.\n
+       Please follow the following rules:\n
+       1.You must  only extract products which is included in context.
+       2.If you don't have links of products or product name, you shoud give empty value. Don't try to make.
        \n
        {format_instructions}
     """
