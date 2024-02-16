@@ -9,6 +9,8 @@ from backend.tools.tools import cars_tool, general_tool, medical_tool
 from langchain.agents import AgentExecutor, create_react_agent
 from typing import Any, Dict, List
 from langchain.agents import create_openai_functions_agent
+from backend.output_parsers import product_parser
+from backend.chains.custom_chains import get_products_chain
 
 
 
@@ -29,31 +31,20 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
 
         Question: {question}
         """
+    
+    prompt_template= PromptTemplate(
+        template=template,
+        input_variables=["question"]
+    )
+
     tools=[
-       cars_tool(), medical_tool()
+       medical_tool(), cars_tool()
     ]
+
 
     print(tools)
 
-    # react_prompt = hub.pull("hwchase17/react")
 
-    # prompt_template = PromptTemplate(
-    #     template=template, input_variables=["question"]
-    # )
-   
-    # agent=create_react_agent(
-    #     llm,
-    #     tools,
-    #     prompt=react_prompt
-    # )
-    
-    # answer=agent_executor.invoke(
-    #     input={
-    #         "input":prompt_template.format_prompt(question=query),
-    #         "chat_history":chat_history
-
-    #     }
-    # )
 
     prompt = hub.pull("hwchase17/openai-functions-agent")
 
@@ -65,16 +56,39 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
     
     agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
 
+    # answer=agent_executor.invoke(
+    #     {
+    #         "input":query,
+    #         "chat_history": chat_history  
+    #     }
+    # )
+
     answer=agent_executor.invoke(
-        {
-            "input":query,
-            "chat_history": chat_history  
+        input={
+            "input":prompt_template.format_prompt(question=query),
+            "chat_history":chat_history
+
         }
     )
 
-  
+
+    products_chains=get_products_chain()
+
+    products= products_chains.run(answer=answer["output"])
+    products= product_parser.parse(products)
+    print(products.to_dict())
+
     return answer
 
 if __name__=='__main__':
-    print(main_agent(query="Do you have Lexus?"))
+    print(main_agent(query="Do you have cars?"))
+    print(main_agent(query=" I have toothache. what should I do?"))
+    print(main_agent(query="Do you have bandages?"))
+    # answer= main_agent(query="Do you have cars?")
+    # products_chains=get_products_chain()
+
+    # products= products_chains.run(answer=answer["output"])
+    # products= product_parser.parse(products)
+
+    # print(products.to_dict())
     

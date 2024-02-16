@@ -37,7 +37,7 @@ def run_llm (query: str, chat_history: List[Dict[str, Any]] = []):
 def cars_tool():
     
     structured_tool = StructuredTool.from_function(
-        name="cars_answer",
+        name="car_answer",
         func=run_llm,
         description="Search for information about Cars. For any questions about Cars, you must use this tool!",
         return_direct=True
@@ -50,7 +50,8 @@ def medical_tool():
     structured_tool = StructuredTool.from_function(
         name="medical_answer",
         func=run_llm,
-        description="Search for information about Medical. For any questions about medical, you must use this tool!"
+        description="Search for information about Medical. For any questions about medical, you must use this tool!",
+        return_direct=True
     )
 
     return structured_tool
@@ -59,7 +60,8 @@ def general_tool():
     structured_tool = StructuredTool.from_function(
         name="genera_answer",
         func=run_llm,
-        description="Use this tool if you want to answer questions that don't involve about certail fields such as cars, medicals and so on."
+        description="Use this tool if you want to answer questions that don't involve about certail fields such as cars, medicals and so on.",
+        return_direct=True
     )
 
     return structured_tool
@@ -67,9 +69,9 @@ def general_tool():
 def cars_parameter_confirm_tool():
     
     structured_tool = StructuredTool.from_function(
-        name="Car parameter confiirm",
+        name="car_parameter_confirmed",
         func=run_llm,
-        description="Use this tool when you confirmed all parameter of cars"
+        description="Use this tool when you confirmed all parameter of cars. If you didn't confirmed the all parameters about cars, you  don't must use this tool."
     )
 
 

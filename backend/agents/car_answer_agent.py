@@ -11,7 +11,7 @@ from typing import Any, Dict, List
 from langchain import hub
 import backend.tools.tools as car_agent_tool
 #from backend.tools.tools import cars_parameter_confirm_tool
-from langchain.agents import AgentExecutor, create_react_agent
+from langchain.agents import AgentExecutor, create_react_agent, create_openai_functions_agent
 
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
@@ -34,17 +34,18 @@ def car_answer_agent(query:str,  chat_history: List[Dict[str, Any]] = []):
         car_agent_tool.cars_parameter_confirm_tool()
     ]
 
-    react_prompt= hub.pull("hwchase17/react")
+    prompt = hub.pull("hwchase17/openai-functions-agent")
+
 
     prompt_template= PromptTemplate(
         template=template,
         input_variables=["question"]
     )
 
-    agent= create_react_agent(
+    agent= create_openai_functions_agent(
         llm,
         tools,
-        prompt=react_prompt
+        prompt
     )
 
     agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
