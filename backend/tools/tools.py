@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_pinecone import Pinecone as PineconeLangchain
 from pinecone import Pinecone
 from langchain.tools.retriever import create_retriever_tool
-from ..agents.car_answer_agent import car_answer_agent
+from backend.agents.car_answer_agent import car_answer_agent
 
 from langchain.prompts import PromptTemplate
 from langchain.chains.llm import LLMChain
@@ -49,12 +49,11 @@ def run_llm (query: str, chat_history: List[Dict[str, Any]] = []):
 def run_llm1(query: str, chat_history: List[Dict[str, Any]] = []):
 
 
-    prompt_template=""" You are a helpful assistant.
-                        Your name is bob.
-                        Use the following pieces of context to answer the question at the end. Please follow the following rules:
-                        1. If you don't know the answer, don't try to make an answer and say that **I don't know**.
-                        2. In context, if you have  the source links of products which you mentioned in final answer, you must add that in answer.
-                        3. If you don't have links, don't try to make that.
+    prompt_template="""Use the following pieces of context to answer the question at the end.
+                        If you don't know the answer, just say that you don't know, don't try to make up an answer.
+                        Please follow the following rules:
+                        1 In provided context, if you have the source links( website links) of products which you mentioned in final answer, you must add that in answer.
+                        2.If you don't have online links , don't try to make that and just say that you don't have that.
                         {context}
 
                         Question: {question}
@@ -104,7 +103,7 @@ def cars_tool():
     
     structured_tool = StructuredTool.from_function(
         name="car_answer",
-        func=run_llm1,
+        func=car_answer_agent,
         description="Search for information about Cars. For any questions about Cars, you must use this tool!",
         return_direct=True
     )

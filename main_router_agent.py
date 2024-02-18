@@ -41,11 +41,6 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
        medical_tool(), cars_tool()
     ]
 
-
-    print(tools)
-
-
-
     prompt = hub.pull("hwchase17/openai-functions-agent")
 
     agent=create_openai_functions_agent(
@@ -56,12 +51,6 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
     
     agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
 
-    # answer=agent_executor.invoke(
-    #     {
-    #         "input":query,
-    #         "chat_history": chat_history  
-    #     }
-    # )
 
     answer=agent_executor.invoke(
         input={
@@ -93,36 +82,16 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
 
 if __name__=='__main__':
     
-    # main_agent(query=" I have toothache. what should I do?")
-    answer = main_agent(query="Do you have bandages")
+    # print(main_agent(query=" I have toothache. what should I do?"))
+    # print(main_agent(query="Do you have bandages."))
 
-    print(answer)
+    print(main_agent(query="do you have lexus?"))
 
-    # product_list =answer["product_list"]["products"]
+   
 
+    print(main_agent(query="Petrol"))
+
+    print(main_agent(query="I am looking for red."))
     
-    # def create_product_string(porduct_list:List[any]):
-    #     product_json_array= []
-
-    #     product_list_str = " " 
-    #     for index, product in enumerate(product_list):
-    #         product_json_array.append(product.to_json())
-    #         product_json= product.to_json()
-    #         product_name= product_json['product_name']
-    #         product_link= product_json['product_link']
-    #         if len(product_json["product_link"])!=0:
-    #              product_list_str += f"{index}. {product_name} \n {product_link}"
-           
-
-    #     return product_list_str
-
-
-    # print("json array:",create_product_string(product_list))
-    #answer= main_agent(query="what is your name?")
-    # products_chains=get_products_chain()
-
-    # products= products_chains.run(answer=answer["output"])
-    # products= product_parser.parse(products)
-
-    # print(products.to_dict())
+   
     

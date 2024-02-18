@@ -14,7 +14,7 @@ def get_products_chain()-> LLMChain:
        products list you mentioned.\n
        Please follow the following rules:\n
        1.You must  only extract products which is included in context.
-       2.If you don't have links of products or product name, you shoud give empty value. Don't try to make.
+       2.If you don't have links( website links) of products or product name in text, you shoud give empty value. Don't try to make.
        \n
        {format_instructions}
     """
