@@ -140,11 +140,11 @@ if __name__=='__main__':
 
     
 
-    # print(main_agent(query="Truck"))
+    print(main_agent(query="Truck"))
 
-    # print(main_agent(query="Petrol"))
+    print(main_agent(query="Petrol"))
 
-    # print(main_agent(query="I am looking for red color truck."))
+    print(main_agent(query="I am looking for red color truck."))
 
     # print(main_agent(query="what is your name?"))
     # print(main_agent(query="what is React?"))
