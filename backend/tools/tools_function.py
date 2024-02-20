@@ -100,9 +100,10 @@ def run_llm_rag_with_media_link(query: str, chat_history: List[Dict[str, Any]] =
 
 def general_answer(query:str):
     template= """
-        Your name is  Bob, helpful assistant.
-        Your purpose is to answer only the question about Car and Medical&Health.
-        If the question is not related car and medical, you just say don't know and require the question about that.
+        Your name is  Bob, helpful assistant for Car and Medical & Health.
+        Your purpose is to answer the question about Car and Medical&Health.
+        If the question is not related car and medical, avoid to answer as possible.
+        If you don't know the answer, you just say I don't know. and require the question about Car and Medical.
         Begin. 
         Question: {question}
         """

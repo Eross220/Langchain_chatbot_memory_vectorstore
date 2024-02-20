@@ -106,6 +106,7 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
 
     ###########################parsing answer as answer and product list for frontend###########
     products_chains=get_products_chain()
+    products= products_chains.invoke({"answer":answer["output"]})
     products= products_chains.run(answer=answer["output"])
 
     #check validation for parsing
@@ -134,8 +135,8 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
 
 if __name__=='__main__':
     
-    print(main_agent(query=" I have toothache. what should I do?"))
-    print(main_agent(query="Do you have bandages?"))
+    # print(main_agent(query=" I have toothache. what should I do?"))
+    # print(main_agent(query="Do you have bandages?"))
 
     
 
@@ -145,8 +146,8 @@ if __name__=='__main__':
 
     # print(main_agent(query="I am looking for red color truck."))
 
-    # print(main_agent(query="what is your name?"))
-    #print(main_agent(query="what is React?"))
+    print(main_agent(query="what is your name?"))
+    print(main_agent(query="what is React?"))
 
     print(main_agent(query="Hello"))
     # print(main_agent(query="who are you?"))
