@@ -15,7 +15,7 @@ from langchain.agents import AgentExecutor, create_react_agent, create_openai_fu
 from backend.slots.slot_filling_conversation import SlotFilling
 from backend.slots.slot_memory import SlotMemory
 from backend.core import run_llm
-from backend.tools.car_tools import run_llm_rag_with_media_link
+from backend.tools.tools_function import run_llm_rag_with_media_link
 
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 

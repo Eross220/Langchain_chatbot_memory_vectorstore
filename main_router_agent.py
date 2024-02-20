@@ -14,7 +14,6 @@ from backend.chains.custom_chains import get_products_chain
 from langchain.utils.math import cosine_similarity
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
-from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 import json
 
@@ -135,19 +134,22 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
 
 if __name__=='__main__':
     
-    # print(main_agent(query=" I have toothache. what should I do?"))
-    # print(main_agent(query="Do you have bandages?"))
+    print(main_agent(query=" I have toothache. what should I do?"))
+    print(main_agent(query="Do you have bandages?"))
 
     
 
-    print(main_agent(query="Truck"))
+    # print(main_agent(query="Truck"))
 
-    print(main_agent(query="Petrol"))
+    # print(main_agent(query="Petrol"))
 
-    print(main_agent(query="I am looking for red color truck."))
+    # print(main_agent(query="I am looking for red color truck."))
 
     # print(main_agent(query="what is your name?"))
-    # print(main_agent(query="what is node.js?"))
+    #print(main_agent(query="what is React?"))
+
+    print(main_agent(query="Hello"))
+    # print(main_agent(query="who are you?"))
 
 
     

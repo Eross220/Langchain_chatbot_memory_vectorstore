@@ -13,7 +13,8 @@ from pinecone import Pinecone
 from langchain.prompts import PromptTemplate
 from langchain.chains.llm import LLMChain
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
-
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_openai import ChatOpenAI
 
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 PINECONE_API_KEY=os.getenv("PINECONE_API_KEY")
@@ -52,6 +53,7 @@ def run_llm_rag_with_media_link(query: str, chat_history: List[Dict[str, Any]] =
                         Please follow the following rules:
                         1 In provided context, if you have the source links( website links) of products which you mentioned in final answer, you must add that in answer.
                         2.If you don't have online links , don't try to make that and just say that you don't have that.
+
                         {context}
 
                         Question: {question}
@@ -96,3 +98,26 @@ def run_llm_rag_with_media_link(query: str, chat_history: List[Dict[str, Any]] =
     return answer['result']
 
 
+def general_answer(query:str):
+    template= """
+        Your name is  Bob, helpful assistant.
+        Your purpose is to answer only the question about Car and Medical&Health.
+        If the question is not related car and medical, you just say don't know and require the question about that.
+        Begin. 
+        Question: {question}
+        """
+
+
+    llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
+
+    general_prompt_template= PromptTemplate(
+        input_variables=["question"],
+        template=template,
+    )
+
+    general_answer_chain=LLMChain(llm=llm, prompt=general_prompt_template)
+
+
+    answer=general_answer_chain.invoke({"question":query})
+
+    return answer
