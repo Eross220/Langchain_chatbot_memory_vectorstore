@@ -121,4 +121,6 @@ def general_answer(query:str):
 
     answer=general_answer_chain.invoke({"question":query})
 
-    return answer
+    print("general answer", answer["text"])
+
+    return answer["text"]
