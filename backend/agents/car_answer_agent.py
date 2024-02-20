@@ -15,6 +15,7 @@ from langchain.agents import AgentExecutor, create_react_agent, create_openai_fu
 from backend.slots.slot_filling_conversation import SlotFilling
 from backend.slots.slot_memory import SlotMemory
 from backend.core import run_llm
+from backend.tools.car_tools import run_llm_rag_with_media_link
 
 OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
@@ -24,17 +25,30 @@ memory = SlotMemory(llm=llm_slot)
 slot_filling = SlotFilling(memory=memory, llm=llm_slot)
 chain = slot_filling.create()
 
+final_query=''
 
 def car_answer_agent(query:str,  chat_history: List[Dict[str, Any]] = []):
     # LLM for car answer agent.. this process the questions 
     llm = ChatOpenAI(verbose=True,temperature=0,openai_api_key=OPENAI_API_KEY)
 
-    print("current slot", slot_filling.memory.current_slots)
+    global final_query
+
+    if final_query=='':
+        final_query= query
+
     if(slot_filling.memory.inform_check==False):
-       answer=chain.predict(input=query)
-    
-    else : 
-        answer=run_llm(query=query)
+        answer=chain.predict(input=query)
+        print("current slot", slot_filling.memory.current_slots)
+
+    if (slot_filling.memory.inform_check==True):
+        print("global final query", final_query)
+        final_answer=run_llm_rag_with_media_link(query=final_query)
+
+        return final_answer
+    else:
+        return answer
+
+
     # template = """
     #     You are a helpful assistant having a conversation with a human.
     #     Your purpose is to answer the question about cars.
@@ -74,7 +88,7 @@ def car_answer_agent(query:str,  chat_history: List[Dict[str, Any]] = []):
     #     }
     # )
 
-    return answer
+    # return answer
 
 
 

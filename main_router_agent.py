@@ -63,8 +63,11 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
 
     products_chains=get_products_chain()
     products= products_chains.run(answer=answer["output"])
+   
     products= product_parser.parse(products)
     product_list= products.to_dict()
+
+    print("products:", products)
 
     # print("question:\n", query)
     
@@ -76,22 +79,26 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
     return (
         {
             "result":answer["output"],
-            "product_list":product_list
+            "product_list":products.to_dict()
         }
     ) 
+
+    # return answer["output"]
 
 if __name__=='__main__':
     
     # print(main_agent(query=" I have toothache. what should I do?"))
-    # print(main_agent(query="Do you have bandages."))
+    # print(main_agent(query="Do you have bandages?"))
 
-    print(main_agent(query="do you have lexus?"))
+    
 
-   
+    print(main_agent(query="Truck"))
 
     print(main_agent(query="Petrol"))
 
-    print(main_agent(query="I am looking for red."))
+    print(main_agent(query="I am looking for red color truck."))
+
+
     
    
     

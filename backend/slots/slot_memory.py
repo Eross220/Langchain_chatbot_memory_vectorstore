@@ -85,6 +85,7 @@ class SlotMemory(BaseChatMemory):
         # print(f"current slots: {self.current_slots}")
                 
         self.information_check()
+        
         return {
             self.chat_history_key: buffer_string,
             self.slot_key: str(self.current_slots),

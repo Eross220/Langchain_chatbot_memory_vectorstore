@@ -66,6 +66,8 @@ if prompt:
         st.session_state.user_prompt_history.append(prompt)
         st.session_state.chat_answers_history.append(formatted_response)
 
+        # st.session_state.chat_answers_history.append(generated_response["result"])
+
 if st.session_state["chat_answers_history"]:
     for generated_response, user_query in zip(
         st.session_state["chat_answers_history"],
