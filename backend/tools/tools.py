@@ -40,7 +40,7 @@ def cars_tool():
     structured_tool = StructuredTool.from_function(
         name="car_answer",
         func=car_answer_agent,
-        description="Search for information about Cars. For any questions about Cars, you must use this tool!",
+        description="Search for information about Cars. For any questions related Cars, you must use this tool!",
         return_direct=True
     )
 
@@ -59,9 +59,9 @@ def medical_tool():
 
 def general_tool():
     structured_tool = StructuredTool.from_function(
-        name="genera_answer",
+        name="general_answer",
         func=run_llm_rag_with_media_link,
-        description="Use this tool if you want to answer questions that don't involve about certail fields such as cars, medicals and so on.",
+        description="If you can't find certain tools to answer question, you must use this tool. ",
         return_direct=True
     )
 
