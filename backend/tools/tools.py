@@ -41,7 +41,7 @@ def general_tool():
     structured_tool = StructuredTool.from_function(
         name="general_answer",
         func=general_answer,
-        description="If you can't find certain tools to answer question, you must use this tool. ",
+        description="Useful for when you need to answer general questions about people, places, companies, facts, historical events, or other subjects.If you can't find certain tools to answer question, you must use this tool. ",
         return_direct=True
     )
 

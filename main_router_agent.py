@@ -33,6 +33,7 @@ medical_template = """
         You are a  medical helpful assistant.
         Your purpose is to answer question about Medical & Health. 
         Do not guess or estimate  answers. you must rely only on the answer that you get from the tools.
+        If you don't find the tools, you must use to answer general_tool().
         Do not answer to question with anything else but the tools provided to you.
         Begin!
 
@@ -41,7 +42,7 @@ medical_template = """
 
 general_template = """
         You are a helpful assistant.
-        Your purpose is to answer about common question except car and medical.
+        Your purpose is to answer about common question excluding car and medical.
         Do not guess or estimate  answers. you must rely only on the answer that you get from the tools.
         Do not answer to question with anything else but the tools provided to you.
         Begin!
@@ -105,6 +106,7 @@ def main_agent(query:str, chat_history: List[Dict[str, Any]] = []):
     )
 
     ###########################parsing answer as answer and product list for frontend###########
+
     products_chains=get_products_chain()
     products= products_chains.invoke({"answer":answer["output"]})
     products= products_chains.run(answer=answer["output"])
@@ -140,17 +142,18 @@ if __name__=='__main__':
 
     
 
-    print(main_agent(query="Truck"))
-
-    print(main_agent(query="Petrol"))
-
-    print(main_agent(query="I am looking for red color truck."))
-
-    # print(main_agent(query="what is your name?"))
-    # print(main_agent(query="what is React?"))
-
+    
     print(main_agent(query="Hello"))
-    # print(main_agent(query="who are you?"))
+
+    print(main_agent(query="red"))
+
+    # print(main_agent("what is petrol?"))
+
+    # print(main_agent(query="Truck"))
+
+    # print(main_agent(query="Petrol"))
+
+    # print(main_agent(query="I am looking for red color truck."))
 
 
     

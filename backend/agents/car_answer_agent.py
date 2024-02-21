@@ -41,9 +41,12 @@ def car_answer_agent(query:str,  chat_history: List[Dict[str, Any]] = []):
         print("current slot", slot_filling.memory.current_slots)
 
     if (slot_filling.memory.inform_check==True):
-        print("global final query", final_query)
+        print("global final query", final_query, slot_filling.memory)
+        print("current slot", slot_filling.memory.current_slots)
         final_answer=run_llm_rag_with_media_link(query=final_query)
-
+        final_query=''
+        slot_filling.memory.inform_check=False
+        slot_filling.memory.current_slots = {"type_of_car": "null", "fuel_of_car": "null", "color_of_car": "null"}
         return final_answer
     
     else:
